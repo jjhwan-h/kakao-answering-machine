@@ -13,11 +13,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-func ReqOCR(bitmap *robotgo.CBitmap) []string {
+func ReqOCR(bitmap *robotgo.CBitmap) string {
 	img := robotgo.ToImage(*bitmap)
 	if img == nil {
 		log.Printf("Failed to convert CBitmap to image.Image")
-		return nil
+		return ""
 	}
 
 	var b bytes.Buffer
@@ -26,19 +26,19 @@ func ReqOCR(bitmap *robotgo.CBitmap) []string {
 	fw, err := w.CreateFormFile("img", "screenshot.png") // The filename is just a placeholder
 	if err != nil {
 		log.Printf("Failed to create form file: %v", err)
-		return nil
+		return ""
 	}
 
 	if err := png.Encode(fw, img); err != nil {
 		log.Printf("Failed to encode image: %v", err)
-		return nil
+		return ""
 	}
 	w.Close()
 	uri := viper.GetString("OCRAPI")
 	req, err := http.NewRequest("POST", uri, &b)
 	if err != nil {
 		log.Printf("Failed to create request: %v", err)
-		return nil
+		return ""
 	}
 
 	req.Header.Set("Content-Type", w.FormDataContentType())
@@ -47,10 +47,10 @@ func ReqOCR(bitmap *robotgo.CBitmap) []string {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Printf("Failed to send request: %v", err)
-		return nil
+		return ""
 	}
 
-	var res []string
+	var res string
 	json.NewDecoder(resp.Body).Decode(&res)
 	fmt.Printf("req : %s\n", res)
 	defer resp.Body.Close()

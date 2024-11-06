@@ -34,7 +34,7 @@ func FreeBitmap(bitmap *robotgo.CBitmap) {
 func CollectRedPixels(dir *DIR) []image.Point {
 	var redPixels []image.Point
 
-	fmt.Println(dir.X1, dir.Y1, dir.X2, dir.Y2)
+	//fmt.Println(dir.X1, dir.Y1, dir.X2, dir.Y2)
 	for y := dir.Y1; y < dir.Y2; y++ {
 		for x := dir.X1; x < dir.X2; x++ {
 
