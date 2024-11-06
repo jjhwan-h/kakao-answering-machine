@@ -4,6 +4,7 @@ go 1.22.2
 
 require (
 	github.com/go-vgo/robotgo v0.110.5
+	github.com/sashabaranov/go-openai v1.32.5
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 )
