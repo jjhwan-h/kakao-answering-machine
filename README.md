@@ -3,7 +3,6 @@
 유튜브에서 **빵형의 개발도상국**님의 [카카오톡 매크로 영상](https://www.youtube.com/watch?v=tFVk-o2JA3o)을 보다가 영감을 받아 **Python** 대신 **Go 언어**로 구현해보았습니다.
 
 <div style="display: flex; justify-content: space-around;">
-   <img width="45%" height="250px" alt="image" src="https://github.com/user-attachments/assets/41199be7-f888-4f2d-b2a0-d225c429e212">
    <img width="45%" height="250px" alt="image" src="https://github.com/user-attachments/assets/36cf45e2-f35f-4e57-b751-7c73a125267e">
 </div>
 
@@ -105,12 +104,10 @@
 ## 🎥 실행 영상
 
 - [v1 영상](https://drive.google.com/file/d/1Kz0qJePBee7PzzAGZfdqdCHlS8xKkwVe/view?usp=sharing)
-- [v2 영상](https://drive.google.com/file/d/105xZpnI1I9sVdj-K_KJn5NjRLC6yRRQY/view?usp=sharing)
 
 ---
 
 ## 📝 버전 정보
 
 - **v1**: ~~OpenWeather API를 이용하여 날씨 정보 제공~~
-- **v2**: ~~ChatGPT API를 통해 일상 대화 기능 추가~~
-- **v3**: ...
+- **v2**: ...
