@@ -23,12 +23,12 @@ v1: 날씨를 알려주는 기능 구현. (모든 것은 자동으로 이루어�
 # 실행
 0. setup
   - .env
-  ```
-  CURRENTAPI= [ openweathermap api url]
-  KEY= [ openweathermap api key]
-  LANG="kr"
-  OCRAPI= [ ocr 서버url]
-  ```
+     ```
+     CURRENTAPI= [ openweathermap api url]
+     KEY= [ openweathermap api key]
+     LANG="kr"
+     OCRAPI= [ ocr 서버url]
+     ```
   - 채팅대기방 채팅창 위치
     - 새로운 채팅 스캔 및 채팅 내용 캡쳐 시 채팅방의 위치가 중요
     - cmd/serve.go의 Start에서 상황에 따라 수정
