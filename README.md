@@ -1,91 +1,116 @@
-<img width="568" alt="image" src="https://github.com/user-attachments/assets/36cf45e2-f35f-4e57-b751-7c73a125267e">
+# 📌Kakao-answering-machine
 
-# 개요
-유튜브를 보다가 빵형의 개발도상국님의 카카오톡 매크로(https://www.youtube.com/watch?v=tFVk-o2JA3o)를 보게되었다.<br>
-재밌을것 같아서 python대신 golang으로 만들어 보았다.
+유튜브에서 **빵형의 개발도상국**님의 [카카오톡 매크로 영상](https://www.youtube.com/watch?v=tFVk-o2JA3o)을 보다가 영감을 받아 **Python** 대신 **Go 언어**로 구현해보았습니다.
 
-# 기능
-v1: 날씨를 알려주는 기능 구현. (모든 것은 자동으로 이루어진다.)
-1. 1분마다 카카오톡 채팅창을 스캔
-2. 새로운 채팅 알림이 뜰경우 빨간색 원이 나타난다.
-   <img width="64" alt="image" src="https://github.com/user-attachments/assets/d402f442-79d5-4093-8be6-79052431b867">
-3. 이를 인식하여 빨간색원의 좌표를 더블클릭하여 채팅방 접속
-4. 채팅방하단의 내용을 캡쳐하여 OCR서버로 전송
-5. 날씨 [지역]으로된 문장이 있을 경우 [지역]만 리턴
-6. OpenWeather(https://openweathermap.org/current)의 current weather API를 이용하여 [지역]의 날씨를 받아온다.
-7. 받아온 날씨 데이터를 다듬어서 채팅방에 제공
+<div style="display: flex; justify-content: space-around;">
+   <img width="45%" height="250px" alt="image" src="https://github.com/user-attachments/assets/41199be7-f888-4f2d-b2a0-d225c429e212">
+   <img width="45%" height="250px" alt="image" src="https://github.com/user-attachments/assets/36cf45e2-f35f-4e57-b751-7c73a125267e">
+</div>
 
-# 실행환경
-- macOS: Sonoma 14.2.1
-- golang: 1.22.2
-- python(OCR서버): 3.10
-  
-# 실행
-0. setup
-  - .env
-     ```
-     CURRENTAPI= [ openweathermap api url]
-     KEY= [ openweathermap api key]
+---
+
+## 🚀 기능 (v1: 날씨 정보 제공)
+
+1. **자동 채팅 감지**: 1분마다 카카오톡 채팅창을 스캔합니다.
+2. **새 채팅 알림 인식**: 빨간색 원이 나타나면 이를 인식하여 해당 좌표를 더블클릭하여 채팅방에 접속합니다.  
+   <img width="64" alt="red dot" src="https://github.com/user-attachments/assets/d402f442-79d5-4093-8be6-79052431b867">
+3. **채팅 내용 캡처 및 분석**: 채팅방 하단의 내용을 캡처하여 OCR 서버로 전송합니다.
+4. **지역 추출 및 날씨 조회**: "날씨 [지역]" 형식의 문장이 있을 경우, 지역명을 추출합니다.
+5. **날씨 API 호출**: OpenWeather API를 이용하여 해당 지역의 날씨를 조회합니다.
+6. **채팅방에 날씨 정보 제공**: 받은 날씨 데이터를 사용자에게 채팅으로 제공합니다.
+
+---
+
+## ⚙️ 실행환경
+
+- **운영체제**: macOS Sonoma 14.2.1
+- **언어**:
+  - Go 1.22.2
+  - Python 3.10 (OCR 서버용)
+
+---
+
+## 📝 설치 및 실행
+
+### 1. 초기 설정
+
+   - **.env 파일 설정**  
+     OpenWeather 및 OCR 서버 설정 정보를 `.env` 파일에 저장합니다.
+     ```plaintext
+     CURRENTAPI=[openweathermap API URL]
+     KEY=[openweathermap API key]
      LANG="kr"
-     OCRAPI= [ ocr 서버url]
+     OCRAPI=[OCR 서버 URL]
      ```
-  - 채팅대기방 채팅창 위치
-    - 새로운 채팅 스캔 및 채팅 내용 캡쳐 시 채팅방의 위치가 중요
-    - cmd/serve.go의 Start에서 상황에 따라 수정
-     ```
-        func Start() {
-      	messageBox := &internal.DIR{X1: 490, Y1: 900, X2: 570, Y2: 955}
-      	speechBox := &internal.SpeechBox{X: 0, Y: 760, Width: 560, Height: 72}
-     ```
-    - messageBox는 채팅대기방의 box<br>
-    - speechBox는 채팅방에서 캡쳐할 위치. 즉, 새로운 메시지가 있을것으로 예상되는 부분<br>
-    
-1. Open weather의 API 키가 필요
-https://openweathermap.org/current에 접속하여 회원가입 후 Current weather data API(무료)신청 후 API키 발급받는다.<br>
 
-2. 정확한 지역명을 위해 매칭 테이블을 만든다.
-   외국에서 제공하는 API라 영어로 된 지역명이 정확히지 않음 (예를들어, 진천 => Chinch'ŏn)
-   ```go
+   - **채팅창 위치 설정**  
+     `cmd/serve.go`의 `Start` 함수에서 다음과 같이 **messageBox**와 **speechBox**를 수정하여 스캔할 채팅 위치를 설정합니다.
+     ```go
+     func Start() {
+         messageBox := &internal.DIR{X1: 490, Y1: 900, X2: 570, Y2: 955}
+         speechBox := &internal.SpeechBox{X: 0, Y: 760, Width: 560, Height: 72}
+     }
+     ```
+
+### 2. OpenWeather API 키 발급
+
+   - [OpenWeather의 Current Weather API](https://openweathermap.org/current)에 가입하여 무료 API 키를 발급받습니다.
+
+### 3. 지역 매칭 테이블 설정
+
+   - 외국 API라 정확한 한국어 지역명을 위해 **매칭 테이블**을 설정합니다.
+     ```go
      package internal
 
-      var (
-    	CITYTABLE = map[string]string{
-    		"진천": "Chinch'ŏn",
-    		"서울": "Seoul",
-    		"울산": "Ulsan",
-    		"대전": "Daejeon",
-    	}
-    	REVERSCITYTABLE = map[string]string{
-    		"Chinch'ŏn": "진천",
-    		"Seoul":     "서울",
-    		"Ulsan":     "울산",
-    		"Daejeon":   "대전",
-    	}
-    )
+     var (
+         CITYTABLE = map[string]string{
+             "진천": "Chinch'ŏn",
+             "서울": "Seoul",
+             "울산": "Ulsan",
+             "대전": "Daejeon",
+         }
+         REVERSCITYTABLE = map[string]string{
+             "Chinch'ŏn": "진천",
+             "Seoul":     "서울",
+             "Ulsan":     "울산",
+             "Daejeon":   "대전",
+         }
+     )
+     ```
 
-    다른 도시를 더 추가할 경우 https://bulk.openweathermap.org/sample/city.list.json.gz에서 확인 후 **city_table.go**파일에 추가
+### 4. OCR 서버 설정
 
-3. 이전에 만들었던 OCR서버를 이용
-   https://github.com/jjhwan-h/2023-CBNU-OpenSourceProject
-    - build
-    ```
-      docker build -t ocr .
-    ```
-    - run
-    ```
-      docker run -p 3000:5000 ocr
-    ```
-4. bot 실행
-   ```
-      go run main.go serve
+   [OCR 서버 저장소](https://github.com/jjhwan-h/2023-CBNU-OpenSourceProject)로 이동하여 OCR 서버를 빌드하고 실행합니다.
+
+   ```bash
+   docker build -t ocr .
+   docker run -p 3000:5000 ocr
    ```
 
-# 에러
-- 혹시라도 robotgo(https://github.com/go-vgo/robotgo)때문에 에러가 발생한다면 xcode설치
+### 5. Bot 실행
 
-# 실행영상
-https://drive.google.com/file/d/1Kz0qJePBee7PzzAGZfdqdCHlS8xKkwVe/view?usp=sharing
+   ```bash
+   go run main.go serve
+   ```
 
-# v2
-- chatgpt API를 이용해서 날씨뿐아니라 일상대화도 자동으로 할 수 있게 바꿀예정
+---
 
+## 🛠️ 에러 해결
+
+- **RobotGo 오류 발생 시**  
+  [RobotGo](https://github.com/go-vgo/robotgo) 관련 오류가 발생할 경우, Xcode 설치가 필요할 수 있습니다.
+
+---
+
+## 🎥 실행 영상
+
+- [v1 영상](https://drive.google.com/file/d/1Kz0qJePBee7PzzAGZfdqdCHlS8xKkwVe/view?usp=sharing)
+- [v2 영상](https://drive.google.com/file/d/105xZpnI1I9sVdj-K_KJn5NjRLC6yRRQY/view?usp=sharing)
+
+---
+
+## 📝 버전 정보
+
+- **v1**: ~~OpenWeather API를 이용하여 날씨 정보 제공~~
+- **v2**: ~~ChatGPT API를 통해 일상 대화 기능 추가~~
+- **v3**: ...
