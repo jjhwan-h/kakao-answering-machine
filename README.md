@@ -84,7 +84,7 @@ https://openweathermap.org/current에 접속하여 회원가입 후 Current weat
 - 혹시라도 robotgo(https://github.com/go-vgo/robotgo)때문에 에러가 발생한다면 xcode설치
 
 # 실행영상
-
+https://drive.google.com/file/d/1Kz0qJePBee7PzzAGZfdqdCHlS8xKkwVe/view?usp=sharing
 
 # v2
 - chatgpt API를 이용해서 날씨뿐아니라 일상대화도 자동으로 할 수 있게 바꿀예정
