@@ -9,12 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func GetWeather(req []string) string {
+func GetWeather(req string) string {
 	var city string
 	if len(req) == 0 {
 		return ""
 	}
-	if value, exists := CITYTABLE[req[0]]; exists {
+	if value, exists := CITYTABLE[req]; exists {
 		city = value
 	} else {
 		return ""

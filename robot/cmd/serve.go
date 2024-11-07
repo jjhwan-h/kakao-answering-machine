@@ -10,8 +10,8 @@ import (
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "starts a weather-bot",
-	Long:  "starts a weather-bot",
+	Short: "starts a kakao-bot",
+	Long:  "starts a kakao-bot",
 	Run: func(cmd *cobra.Command, args []string) {
 		for {
 			Start()
@@ -23,7 +23,11 @@ func init() {
 	RootCmd.AddCommand(serveCmd)
 }
 
+var Count int
+var MaxCount int
+
 func Start() {
+	MaxCount = 7
 	messageBox := &internal.DIR{X1: 490, Y1: 120, X2: 570, Y2: 170}
 	speechBox := &internal.SpeechBox{X: 0, Y: 760, Width: 560, Height: 72}
 	//testBox := []int{500, 145}
@@ -38,8 +42,10 @@ func Start() {
 		question := internal.ReqOCR(bit)
 		fmt.Println(question)
 		if question != "" {
-			// res := internal.GetWeather(question)
-			res := internal.Send(question)
+			res := internal.GetWeather(question)
+			if res == "" {
+				res = internal.Send(question)
+			}
 			internal.Click(40, 850)
 			internal.EnterInput(res)
 		}
