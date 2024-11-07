@@ -4,20 +4,22 @@
 
 <div style="display: flex; justify-content: space-around;">
    <img width="45%" height="250px" alt="image" src="https://github.com/user-attachments/assets/41199be7-f888-4f2d-b2a0-d225c429e212">
-   <img width="45%" height="250px" alt="image" src="https://github.com/user-attachments/assets/36cf45e2-f35f-4e57-b751-7c73a125267e">
+   <img width="45%" height="250px" alt="image" src="https://github.com/user-attachments/assets/6a40d331-29a1-4c36-9bbe-b8cd6a907574">
 </div>
 
 ---
 
-## 🚀 기능 (v1: 날씨 정보 제공)
+## 🚀 기능 (v1: 날씨 정보 제공 및 gpt를 이용한 자동응답 제공)
 
-1. **자동 채팅 감지**: 1분마다 카카오톡 채팅창을 스캔합니다.
+1. **자동 채팅 감지**: 1초마다 카카오톡 채팅창을 스캔합니다.
 2. **새 채팅 알림 인식**: 빨간색 원이 나타나면 이를 인식하여 해당 좌표를 더블클릭하여 채팅방에 접속합니다.  
    <img width="64" alt="red dot" src="https://github.com/user-attachments/assets/d402f442-79d5-4093-8be6-79052431b867">
 3. **채팅 내용 캡처 및 분석**: 채팅방 하단의 내용을 캡처하여 OCR 서버로 전송합니다.
-4. **지역 추출 및 날씨 조회**: "날씨 [지역]" 형식의 문장이 있을 경우, 지역명을 추출합니다.
+4. **지역 추출 및 날씨 조회**: "[지역]뚱" 형식의 문장이 있을 경우, 지역명을 추출합니다. 지역은 CITYTABLE에 등록되어 있어야합니다.
 5. **날씨 API 호출**: OpenWeather API를 이용하여 해당 지역의 날씨를 조회합니다.
-6. **채팅방에 날씨 정보 제공**: 받은 날씨 데이터를 사용자에게 채팅으로 제공합니다.
+6. **자동 응답생성**: "[지역]뚱"이 아닌 일반적인 "[문장]뚱"인 경우 문장을 추출합니다.
+7. **GPT API 호출**: GPT API를 이용하여 해당 문장에 대한 응답을 생성합니다.
+8. **응답 제공**: 받은 날씨 데이터 또는 GPT를 통해 생성한 응답을 채팅방에 제공합니다.
 
 ---
 
@@ -41,10 +43,17 @@
      KEY=[openweathermap API key]
      LANG="kr"
      OCRAPI=[OCR 서버 URL]
+     GPTKEY=[gpt API key]
      ```
 
    - **채팅창 위치 설정**  
-     `cmd/serve.go`의 `Start` 함수에서 다음과 같이 **messageBox**와 **speechBox**를 수정하여 스캔할 채팅 위치를 설정합니다.
+     `cmd/serve.go`의 `Start` 함수에서 다음과 같이 **messageBox**와 **speechBox**를 수정하여 스캔할 채팅 위치를 설정합니다.<br>
+     **messageBox**는 채팅방 리스트화면입니다. 아래와 같이 빨간색알림이 뜨는 곳을 지정해야합니다.
+     <img width="457" alt="image" src="https://github.com/user-attachments/assets/70a5cafd-62c1-42eb-9860-9ab23ab92e0d">
+     
+      **speechBox**는 채팅방 화면입니다. 아래와 같이 새로운 채팅이 뜨는 곳을 지정해야합니다.
+     <img width="565" alt="image" src="https://github.com/user-attachments/assets/2186626d-4716-45f2-a86e-47e8bce32fb0">
+
      ```go
      func Start() {
          messageBox := &internal.DIR{X1: 490, Y1: 900, X2: 570, Y2: 955}
@@ -77,8 +86,11 @@
          }
      )
      ```
+### 4. GPT API 키 발급
+   - [OpenAI의 GPT API](https://platform.openai.com/api-keys)에 가입하여 API 키 발급합니다.
+   - 필요한 경우 API사용을 위한 결제필요합니다.
 
-### 4. OCR 서버 설정
+### 5. OCR 서버 설정
 
    [OCR 서버 저장소](https://github.com/jjhwan-h/2023-CBNU-OpenSourceProject)로 이동하여 OCR 서버를 빌드하고 실행합니다.
 
@@ -87,7 +99,7 @@
    docker run -p 3000:5000 ocr
    ```
 
-### 5. Bot 실행
+### 6. Bot 실행
 
    ```bash
    go run main.go serve
@@ -104,13 +116,10 @@
 
 ## 🎥 실행 영상
 
-- [v1 영상](https://drive.google.com/file/d/1Kz0qJePBee7PzzAGZfdqdCHlS8xKkwVe/view?usp=sharing)
-- [v2 영상](https://drive.google.com/file/d/105xZpnI1I9sVdj-K_KJn5NjRLC6yRRQY/view?usp=sharing)
+- [영상] https://drive.google.com/file/d/16AKGU-Ld742PhNFq9rED9RfH4H4WXZv1/view?usp=sharing
 
 ---
 
 ## 📝 버전 정보
 
-- **v1**: ~~OpenWeather API를 이용하여 날씨 정보 제공~~
-- **v2**: ~~ChatGPT API를 통해 일상 대화 기능 추가~~
-- **v3**: ...
+- **v1**: 지역 현재날씨 정보, gpt를 이용한 자동응답
