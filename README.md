@@ -92,9 +92,10 @@
 
 ### 5. OCR 서버 설정
 
-   [OCR 서버 저장소](https://github.com/jjhwan-h/2023-CBNU-OpenSourceProject)로 이동하여 OCR 서버를 빌드하고 실행합니다.
+   OCR 서버를 빌드하고 실행합니다.
 
    ```bash
+   cd OCR
    docker build -t ocr .
    docker run -p 3000:5000 ocr
    ```
@@ -102,6 +103,7 @@
 ### 6. Bot 실행
 
    ```bash
+   cd robot
    go run main.go serve
    ```
 
